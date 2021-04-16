@@ -1,0 +1,6 @@
+DATE = "17:02:45 April 16, 2021"
+QUARTUS_VERSION = "16.0.0"
+
+# Revisions
+
+PROJECT_REVISION = "keyboard_vga_integration"
