@@ -1,0 +1,53 @@
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -116.973
+TNS   : -7238.424
+
+Type  : Slow 1200mV 85C Model Hold 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.516
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk'
+Slack : -3.000
+TNS   : -3.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.403
+TNS   : -47.151
+
+Type  : Slow 1200mV 0C Model Setup 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -106.109
+TNS   : -6563.519
+
+Type  : Slow 1200mV 0C Model Hold 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.435
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk'
+Slack : -3.000
+TNS   : -3.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.403
+TNS   : -47.151
+
+Type  : Fast 1200mV 0C Model Setup 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -47.665
+TNS   : -2892.779
+
+Type  : Fast 1200mV 0C Model Hold 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.238
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk'
+Slack : -3.000
+TNS   : -3.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clock_devider1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.000
+TNS   : 0.000
+
+------------------------------------------------------------
