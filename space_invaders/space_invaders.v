@@ -26,6 +26,8 @@ module space_invaders(
 	reg [3:0] r_red = 0;
 	reg [3:0] r_blue = 0;
 	reg [3:0] r_green = 0;
+	
+	
 		
 	//clock
 	wire clk25MHz;
@@ -39,10 +41,20 @@ module space_invaders(
 	wire  [2:0] direction_x;
 	integer direction_y = 0;
 	
+	// enemy
+	integer enemy_x_pos = 400; 
+	integer enemy_y_pos = 40;
+	integer enemy_size = 20;
+	reg enemy_direction = 0;
+	
+	
 	
 	move_clk update_clk(clk, clk_move);
 	vga_clk vga_reduce(clk, clk25MHz);
 	keyboard move(kData, kClock, direction_x, LEDR);
+	
+	
+	
 	
 	// counter and sync generation
 	always @(posedge clk25MHz)  // horizontal counter
@@ -70,9 +82,13 @@ module space_invaders(
 
 	always @ (posedge clk25MHz)
 	begin
-      if (counter_y >= position_y && counter_y < position_y+size_y)
+      if ((counter_y >= position_y && counter_y < position_y+size_y) ||
+		     counter_y >= enemy_y_pos && counter_y < enemy_y_pos + enemy_size) // drawing an enemy
+		
+			// x section BEGIN
 			begin
-				if (counter_x >= position_x && counter_x < position_x + size_x)
+				if ((counter_x >= position_x && counter_x < position_x + size_x) ||
+						counter_x >= enemy_x_pos && counter_x < position_x + enemy_size) // drawing an enemy
 					begin
 						r_red <= 4'hF;    
 						r_blue <= 4'hF;
@@ -85,6 +101,7 @@ module space_invaders(
 						r_green <= 4'h0;
 					end
 			end
+			// x section END
 		else 
 			begin
 				r_red <= 4'h0;    
@@ -113,6 +130,21 @@ module space_invaders(
 		begin
 			position_x = 783 - size_x;
 		end
+		
+		// enemy
+		// enemy: move x
+		if(enemy_direction == 0) begin
+			enemy_x_pos = enemy_x_pos + 1;
+			end
+		else begin 
+			enemy_x_pos = enemy_x_pos - 1;
+			end
+		// enemy: move down when chaneging a direction
+		if(enemy_x_pos == 784 || enemy_x_pos == 144) begin
+			enemy_direction = ~enemy_direction;
+			enemy_y_pos = enemy_y_pos + 1;
+			end
+		
 	end
 
 	
