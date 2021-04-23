@@ -1,5 +1,5 @@
 Analysis & Synthesis report for space_invaders
-Sun Apr 18 21:47:30 2021
+Wed Apr 21 20:17:18 2021
 Quartus Prime Version 19.1.0 Build 670 09/22/2019 SJ Lite Edition
 
 
@@ -15,12 +15,13 @@ Quartus Prime Version 19.1.0 Build 670 09/22/2019 SJ Lite Edition
   7. Analysis & Synthesis Resource Utilization by Entity
   8. User-Specified and Inferred Latches
   9. Registers Removed During Synthesis
- 10. General Register Statistics
- 11. Inverted Register Statistics
- 12. Multiplexer Restructuring Statistics (Restructuring Performed)
- 13. Post-Synthesis Netlist Statistics for Top Partition
- 14. Elapsed Time Per Partition
- 15. Analysis & Synthesis Messages
+ 10. Removed Registers Triggering Further Register Optimizations
+ 11. General Register Statistics
+ 12. Inverted Register Statistics
+ 13. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 14. Post-Synthesis Netlist Statistics for Top Partition
+ 15. Elapsed Time Per Partition
+ 16. Analysis & Synthesis Messages
 
 
 
@@ -47,7 +48,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sun Apr 18 21:47:30 2021       ;
+; Analysis & Synthesis Status        ; Successful - Wed Apr 21 20:17:18 2021       ;
 ; Quartus Prime Version              ; 19.1.0 Build 670 09/22/2019 SJ Lite Edition ;
 ; Revision Name                      ; space_invaders                              ;
 ; Top-level Entity Name              ; space_invaders                              ;
@@ -250,6 +251,18 @@ Note: All latches listed above may not be present at the end of synthesis due to
 +----------------------------------------+----------------------------------------+
 
 
++--------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                ;
++-----------------------+---------------------------+----------------------------------------+
+; Register name         ; Reason for Removal        ; Registers Removed due to This Register ;
++-----------------------+---------------------------+----------------------------------------+
+; keyboard:move|LEDR[9] ; Stuck at GND              ; position_x[31]                         ;
+;                       ; due to stuck port data_in ;                                        ;
+; keyboard:move|LEDR[8] ; Stuck at GND              ; position_x[30]                         ;
+;                       ; due to stuck port data_in ;                                        ;
++-----------------------+---------------------------+----------------------------------------+
+
+
 +------------------------------------------------------+
 ; General Register Statistics                          ;
 +----------------------------------------------+-------+
@@ -321,7 +334,7 @@ Note: All latches listed above may not be present at the end of synthesis due to
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:00     ;
+; Top            ; 00:00:01     ;
 +----------------+--------------+
 
 
@@ -331,7 +344,7 @@ Note: All latches listed above may not be present at the end of synthesis due to
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 19.1.0 Build 670 09/22/2019 SJ Lite Edition
-    Info: Processing started: Sun Apr 18 21:47:19 2021
+    Info: Processing started: Wed Apr 21 20:17:02 2021
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off space_invaders -c space_invaders
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -367,8 +380,8 @@ Info (21057): Implemented 350 device resources after synthesis - the final resou
     Info (21061): Implemented 323 logic cells
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 13 warnings
     Info: Peak virtual memory: 4762 megabytes
-    Info: Processing ended: Sun Apr 18 21:47:30 2021
-    Info: Elapsed time: 00:00:11
-    Info: Total CPU time (on all processors): 00:00:22
+    Info: Processing ended: Wed Apr 21 20:17:18 2021
+    Info: Elapsed time: 00:00:16
+    Info: Total CPU time (on all processors): 00:00:26
 
 

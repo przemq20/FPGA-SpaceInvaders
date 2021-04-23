@@ -1,5 +1,5 @@
 Fitter report for space_invaders
-Sun Apr 18 21:47:42 2021
+Wed Apr 21 20:17:36 2021
 Quartus Prime Version 19.1.0 Build 670 09/22/2019 SJ Lite Edition
 
 
@@ -69,7 +69,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Fitter Summary                                                                   ;
 +------------------------------------+---------------------------------------------+
-; Fitter Status                      ; Successful - Sun Apr 18 21:47:42 2021       ;
+; Fitter Status                      ; Successful - Wed Apr 21 20:17:36 2021       ;
 ; Quartus Prime Version              ; 19.1.0 Build 670 09/22/2019 SJ Lite Edition ;
 ; Revision Name                      ; space_invaders                              ;
 ; Top-level Entity Name              ; space_invaders                              ;
@@ -153,13 +153,13 @@ https://fpgasoftware.intel.com/eula.
 ; Number detected on machine ; 4           ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 1.05        ;
+; Average used               ; 1.07        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   1.8%      ;
-;     Processors 3-4         ;   1.8%      ;
+;     Processor 2            ;   2.2%      ;
+;     Processors 3-4         ;   2.2%      ;
 +----------------------------+-------------+
 
 
@@ -1533,35 +1533,35 @@ Warning (15705): Ignored locations or region assignments to the following nodes
     Warning (15706): Node "KEY[1]" is assigned to location or region, but does not exist in design
     Warning (15706): Node "MAX10_CLK2_50" is assigned to location or region, but does not exist in design
     Warning (15706): Node "start" is assigned to location or region, but does not exist in design
-Info (171121): Fitter preparation operations ending: elapsed time is 00:00:01
+Info (171121): Fitter preparation operations ending: elapsed time is 00:00:02
 Info (14896): Fitter has disabled Advanced Physical Optimization because it is not supported for the current family.
 Info (170189): Fitter placement preparation operations beginning
 Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:00
 Info (170191): Fitter placement operations beginning
 Info (170137): Fitter placement was successful
-Info (170192): Fitter placement operations ending: elapsed time is 00:00:02
+Info (170192): Fitter placement operations ending: elapsed time is 00:00:03
 Info (170193): Fitter routing operations beginning
 Info (170195): Router estimated average interconnect usage is 0% of the available device resources
     Info (170196): Router estimated peak interconnect usage is 1% of the available device resources in the region that extends from location X11_Y11 to location X21_Y21
 Info (170199): The Fitter performed an Auto Fit compilation.  Optimizations were skipped to reduce compilation time.
     Info (170201): Optimizations that may affect the design's routability were skipped
 Info (170194): Fitter routing operations ending: elapsed time is 00:00:01
-Info (11888): Total time spent on timing analysis during the Fitter is 0.32 seconds.
+Info (11888): Total time spent on timing analysis during the Fitter is 0.51 seconds.
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
-Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:01
+Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:02
 Warning (171167): Found invalid Fitter assignments. See the Ignored Assignments panel in the Fitter Compilation Report for more information.
 Warning (169177): 2 pins must meet Intel FPGA requirements for 3.3-, 3.0-, and 2.5-V interfaces. For more information, refer to AN 447: Interfacing MAX 10 Devices with 3.3/3.0/2.5-V LVTTL/LVCMOS I/O Systems.
     Info (169178): Pin kData uses I/O standard 3.3-V LVTTL at Y19 File: C:/Users/lecho/Documents/git/FPGA-SpaceInvaders/space_invaders/space_invaders.v Line: 20
     Info (169178): Pin kClock uses I/O standard 3.3-V LVTTL at AA19 File: C:/Users/lecho/Documents/git/FPGA-SpaceInvaders/space_invaders/space_invaders.v Line: 22
 Info (144001): Generated suppressed messages file C:/Users/lecho/Documents/git/FPGA-SpaceInvaders/space_invaders/space_invaders.fit.smsg
 Info: Quartus Prime Fitter was successful. 0 errors, 18 warnings
-    Info: Peak virtual memory: 5646 megabytes
-    Info: Processing ended: Sun Apr 18 21:47:42 2021
-    Info: Elapsed time: 00:00:11
-    Info: Total CPU time (on all processors): 00:00:16
+    Info: Peak virtual memory: 5645 megabytes
+    Info: Processing ended: Wed Apr 21 20:17:37 2021
+    Info: Elapsed time: 00:00:18
+    Info: Total CPU time (on all processors): 00:00:18
 
 
 +----------------------------+

@@ -70,7 +70,7 @@ module space_invaders(
 
 	always @ (posedge clk25MHz)
 	begin
-      if (counter_y >= position_y && counter_y < position_y+size_y)
+      if ((counter_y >= position_y && counter_y < position_y+size_y) || (counter_y >= kula_y && counter_y < kula_y+size_kula_y))
 			begin
 				if (counter_x >= position_x && counter_x < position_x + size_x)
 					begin
@@ -104,7 +104,6 @@ module space_invaders(
 			position_x = position_x + 10;
 		end
 		
-		//
 		if(position_x > 783 - size_x)
 		begin
 			position_x = 144;
@@ -138,7 +137,6 @@ module move_clk(clk, clk_move);
 			count <= 0;
 		end	
 	end
-	
 endmodule
 
 
@@ -148,7 +146,7 @@ module vga_clk(clk, clk25MHz);
 	
 	always@(posedge clk)
 	begin
-		clk25MHz=~clk25MHz;
+		clk25MHz <= ~clk25MHz;
 	end
 endmodule
 
@@ -159,7 +157,7 @@ module keyboard(kData, kClock, direction_x, LEDR);
 	reg [7:0] code;
 	reg [7:0] prev_code;
 	integer count = 0;
-	output reg [2:0]  direction_x;
+	output reg [2:0] direction_x;
 	output reg [9:0] LEDR;
 
 	always@(negedge kClock) 
