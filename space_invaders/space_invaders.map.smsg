@@ -1,1 +1,0 @@
-Info (10281): Verilog HDL Declaration information at space_invaders.v(32): object "update" differs only in case from object "UPDATE" in the same scope File: C:/Users/lecho/Documents/git/FPGA-SpaceInvaders/space_invaders/space_invaders.v Line: 32
