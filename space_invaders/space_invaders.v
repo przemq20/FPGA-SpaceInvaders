@@ -26,7 +26,6 @@ module space_invaders(
 	reg [3:0] r_blue = 0;
 	reg [3:0] r_green = 0;
 	
-	
 		
 	//clock
 	wire clk25MHz;
@@ -87,62 +86,20 @@ module space_invaders(
 
 	always @ (posedge clk25MHz)
 	begin
-      if (counter_y >= position_y && counter_y < position_y+size_y)
-		
-			// x section BEGIN
+      if ((counter_y >= position_y && counter_y < position_y+size_y && counter_x >= position_x && counter_x < position_x + size_x) ||
+		(counter_y >= enemy_y_pos && counter_y < enemy_y_pos + enemy_size && counter_x >= enemy_x_pos && counter_x < enemy_x_pos + enemy_size) ||
+		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size))
 			begin
-				if (counter_x >= position_x && counter_x < position_x + size_x)
-					begin
-						r_red <= 4'hF;    
-						r_blue <= 4'hF;
-						r_green <= 4'hF;
-					end 
-				else 
-					begin
-						r_red <= 4'h0;    
-						r_blue <= 4'h0;
-						r_green <= 4'h0;
-					end
-			end
-			// x section END
-		///////////////////////////////////////////////////////////////////////////
-		// enemy y section
-		else if (counter_y >= enemy_y_pos && counter_y < enemy_y_pos + enemy_size) begin 
-			// enemy x section
-			if (counter_x >= enemy_x_pos && counter_x < enemy_x_pos + enemy_size) begin // drawing an enemy
-				r_red <= 4'hF;    
-				r_blue <= 4'hF;
-				r_green <= 4'hF;
-			end
-			else begin
-				r_red <= 4'h0;    
-				r_blue <= 4'h0;
-				r_green <= 4'h0;
-			end
-		end // enemy x sectoin end
-		///////////////////////////////////////////////////////////////////////////
-		// bullet y section
-		else if (counter_y >= bullet_y && counter_y < bullet_y + bullet_size) begin 
-			// bullet x section
-			if(counter_x >= bullet_x && counter_x < bullet_x + bullet_size) begin
 				r_red <= 4'hF;    
 				r_blue <= 4'hF;
 				r_green <= 4'hF;
 			end 
-			else begin 
-				r_red <= 4'h0;    
-				r_blue <= 4'h0;
-				r_green <= 4'h0;
-			end
-		end // bullet x section end
-		//////////////////////////////////////////////////////////////////////////
-		// other y 
-		else
+		else 
 			begin
 				r_red <= 4'h0;    
 				r_blue <= 4'h0;
 				r_green <= 4'h0;
-			end		
+			end
 	end
 	
 	always @ (posedge clk_move)
@@ -179,6 +136,10 @@ module space_invaders(
 			enemy_direction = ~enemy_direction;
 			enemy_y_pos = enemy_y_pos + enemy_size;
 			end
+		if(enemy_y_pos >400)
+		begin
+			enemy_y_pos <= 40;
+		end
 		
 		////////////////////////////////////// VVV BEBLOW CODE IS TO CHANGE
 		//bullet run by clock //todo: change to space
