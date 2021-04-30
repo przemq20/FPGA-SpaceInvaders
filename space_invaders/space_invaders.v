@@ -9,7 +9,7 @@ module space_invaders(
 
 	//////////// LED //////////
 	output [9:0] LEDR,
-
+	input [1:0] KEY,
 	//////////// VGA //////////
 	output VGA_hSync,
 	output VGA_vSync, 
@@ -19,6 +19,7 @@ module space_invaders(
 	input kData, 
 	input kClock 
 );
+	integer i;
 	//vga
 	reg [9:0] counter_x = 0;  // horizontal counter
 	reg [9:0] counter_y = 0;  // vertical counter
@@ -30,7 +31,7 @@ module space_invaders(
 	//clock
 	wire clk25MHz;
 	wire clk_move;
-
+	
 	//logic
 	integer size_x = 20;
 	integer size_y = 30;
@@ -39,12 +40,22 @@ module space_invaders(
 	wire  [2:0] direction_x;
 	integer direction_y = 0;
 	
-	// enemy
-	integer enemy_x_pos = 400; 
-	integer enemy_y_pos = 40;
+	// enemy	
+	integer enemy_x_pos[6:0];
+	integer enemy_y_pos[6:0];
+	integer enemy_direction[6:0];
+	initial
+	begin
+		for(i=0;i<7;i=i+1)
+		begin
+			enemy_x_pos[i] = 150 + i*90;
+			enemy_y_pos[i] = 40;
+			enemy_direction[i] = 0;
+		end
+	end
+
 	integer enemy_size = 20;
-	reg enemy_direction = 0;
-	
+
 	//bullet
 	integer bullet_x = 0;
 	integer bullet_y = 0;
@@ -56,8 +67,6 @@ module space_invaders(
 	move_clk update_clk(clk, clk_move);
 	vga_clk vga_reduce(clk, clk25MHz);
 	keyboard move(kData, kClock, direction_x, LEDR, fired);
-	
-	
 	
 	
 	// counter and sync generation
@@ -86,10 +95,16 @@ module space_invaders(
 
 	always @ (posedge clk25MHz)
 	begin
-
       if ((counter_y >= position_y && counter_y < position_y+size_y && counter_x >= position_x && counter_x < position_x + size_x) ||
-		(counter_y >= enemy_y_pos && counter_y < enemy_y_pos + enemy_size && counter_x >= enemy_x_pos && counter_x < enemy_x_pos + enemy_size) ||
-		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size))
+		(counter_y >= enemy_y_pos[0] && counter_y < enemy_y_pos[0] + enemy_size && counter_x >= enemy_x_pos[0] && counter_x < enemy_x_pos[0] + enemy_size) ||
+		(counter_y >= enemy_y_pos[1] && counter_y < enemy_y_pos[1] + enemy_size && counter_x >= enemy_x_pos[1] && counter_x < enemy_x_pos[1] + enemy_size) ||
+		(counter_y >= enemy_y_pos[2] && counter_y < enemy_y_pos[2] + enemy_size && counter_x >= enemy_x_pos[2] && counter_x < enemy_x_pos[2] + enemy_size) ||
+		(counter_y >= enemy_y_pos[3] && counter_y < enemy_y_pos[3] + enemy_size && counter_x >= enemy_x_pos[3] && counter_x < enemy_x_pos[3] + enemy_size) ||
+		(counter_y >= enemy_y_pos[4] && counter_y < enemy_y_pos[4] + enemy_size && counter_x >= enemy_x_pos[4] && counter_x < enemy_x_pos[4] + enemy_size) ||
+		(counter_y >= enemy_y_pos[5] && counter_y < enemy_y_pos[5] + enemy_size && counter_x >= enemy_x_pos[5] && counter_x < enemy_x_pos[5] + enemy_size) ||
+		(counter_y >= enemy_y_pos[6] && counter_y < enemy_y_pos[6] + enemy_size && counter_x >= enemy_x_pos[6] && counter_x < enemy_x_pos[6] + enemy_size) ||
+		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size)
+		)
 			begin
 				r_red <= 4'hF;    
 				r_blue <= 4'hF;
@@ -125,20 +140,43 @@ module space_invaders(
 		
 		// enemy
 		// enemy: move x
-		if(enemy_direction == 0) begin
-			enemy_x_pos = enemy_x_pos + 5;
-			end
-		else begin 
-			enemy_x_pos = enemy_x_pos - 5;
-			end
-		// enemy: move down when chaneging a direction
-		if(enemy_x_pos > 784 || enemy_x_pos <144) begin
-			enemy_direction = ~enemy_direction;
-			enemy_y_pos = enemy_y_pos + enemy_size;
-			end
-		if(enemy_y_pos >400)
+		for(i=0;i<7;i=i+1)
 		begin
-			enemy_y_pos <= 40;
+			if(enemy_direction[i] == 0) 
+			begin
+				enemy_x_pos[i] = enemy_x_pos[i] + 5;
+			end
+			else 
+			begin
+				enemy_x_pos[i] = enemy_x_pos[i] - 5;
+			end
+		end
+		
+		// enemy: move down when chaneging a direction
+		for(i=0;i<7;i=i+1)
+		begin
+			if(enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144)		
+			begin
+				enemy_direction[i] = ~enemy_direction[i];
+				enemy_y_pos[i] = enemy_y_pos[i] + enemy_size + 10;
+			end
+			if(enemy_y_pos[i] > 400)
+			begin
+				enemy_y_pos[i] = 40;
+			end
+		end
+		// handling collisions
+		for(i=0;i<7;i=i+1)
+		begin
+			if(
+			(bullet_x <= enemy_x_pos[i] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[i]) &&
+			(bullet_y <= enemy_y_pos[i] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[i])
+			)
+			begin
+				enemy_y_pos[i] = enemy_y_pos[i] - 100;
+				bullet_y = position_y ;
+				bullet_x = position_x + bullet_size/2;
+			end
 		end
 		
 		////////////////////////////////////// VVV BEBLOW CODE IS TO CHANGE
@@ -202,6 +240,10 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 	output reg [2:0] direction_x;
 	output reg [9:0] LEDR;
 	output reg fired;
+	initial 
+	begin
+		direction_x = 0;
+	end
 
 	always@(negedge kClock) 
 	begin
@@ -237,4 +279,6 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 
 	end
 endmodule
+
+
 	
