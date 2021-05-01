@@ -63,6 +63,9 @@ module space_invaders(
 	wire fired;
 	integer bullet_clk = 0;
 	
+	reg [6:0] digit1 = 7'b0111111;
+	reg [6:0] digit2 = 7'b0111111;
+	integer points = 0 ;
 	
 	move_clk update_clk(clk, clk_move);
 	vga_clk vga_reduce(clk, clk25MHz);
@@ -93,6 +96,35 @@ module space_invaders(
 	assign VGA_hSync = (counter_x >= 0 && counter_x < 96) ? 1:0;  // hsync high for 96 counts                                                 
 	assign VGA_vSync = (counter_y >= 0 && counter_y < 2) ? 1:0;   // vsync high for 2 counts
 
+	always@(points)
+	begin 
+		case(points%10)
+		0: digit1 <= 7'b0111111;
+		1: digit1 <= 7'b0000110;
+		2: digit1 <= 7'b1011011;
+		3: digit1 <= 7'b1001111;
+		4: digit1 <= 7'b1100110;
+		5: digit1 <= 7'b1101101;
+		6: digit1 <= 7'b1111101;
+		7: digit1 <= 7'b0000111;
+		8: digit1 <= 7'b1111111;
+		9: digit1 <= 7'b1101111;
+		endcase
+		
+		case((points%100) / 10)
+		0: digit2 <= 7'b0111111;
+		1: digit2 <= 7'b0000110;
+		2: digit2 <= 7'b1011011;
+		3: digit2 <= 7'b1001111;
+		4: digit2 <= 7'b1100110;
+		5: digit2 <= 7'b1101101;
+		6: digit2 <= 7'b1111101;
+		7: digit2 <= 7'b0000111;
+		8: digit2 <= 7'b1111111;
+		9: digit2 <= 7'b1101111;
+		endcase
+	end
+	
 	always @ (posedge clk25MHz)
 	begin
       if ((counter_y >= position_y && counter_y < position_y+size_y && counter_x >= position_x && counter_x < position_x + size_x) ||
@@ -103,7 +135,23 @@ module space_invaders(
 		(counter_y >= enemy_y_pos[4] && counter_y < enemy_y_pos[4] + enemy_size && counter_x >= enemy_x_pos[4] && counter_x < enemy_x_pos[4] + enemy_size) ||
 		(counter_y >= enemy_y_pos[5] && counter_y < enemy_y_pos[5] + enemy_size && counter_x >= enemy_x_pos[5] && counter_x < enemy_x_pos[5] + enemy_size) ||
 		(counter_y >= enemy_y_pos[6] && counter_y < enemy_y_pos[6] + enemy_size && counter_x >= enemy_x_pos[6] && counter_x < enemy_x_pos[6] + enemy_size) ||
-		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size)
+		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size) ||
+		
+		(digit1[0] && counter_y >= 40 && counter_y < 45 && counter_x >= 755 && counter_x < 770) ||
+		(digit1[1] && counter_y >= 45 && counter_y < 60 && counter_x >= 770 && counter_x < 775) ||
+		(digit1[2] && counter_y >= 65 && counter_y < 80 && counter_x >= 770 && counter_x < 775) ||
+		(digit1[3] && counter_y >= 80 && counter_y < 85 && counter_x >= 755 && counter_x < 770) ||
+		(digit1[4] && counter_y >= 65 && counter_y < 80 && counter_x >= 750 && counter_x < 755) ||
+		(digit1[5] && counter_y >= 45 && counter_y < 60 && counter_x >= 750 && counter_x < 755) ||
+		(digit1[6] && counter_y >= 60 && counter_y < 65 && counter_x >= 755 && counter_x < 770) ||
+		
+		(digit2[0] && counter_y >= 40 && counter_y < 45 && counter_x >= 725 && counter_x < 740) ||
+		(digit2[1] && counter_y >= 45 && counter_y < 60 && counter_x >= 740 && counter_x < 745) ||
+		(digit2[2] && counter_y >= 65 && counter_y < 80 && counter_x >= 740 && counter_x < 745) ||
+		(digit2[3] && counter_y >= 80 && counter_y < 85 && counter_x >= 725 && counter_x < 740) ||
+		(digit2[4] && counter_y >= 65 && counter_y < 80 && counter_x >= 720 && counter_x < 725) ||
+		(digit2[5] && counter_y >= 45 && counter_y < 60 && counter_x >= 720 && counter_x < 725) ||
+		(digit2[6] && counter_y >= 60 && counter_y < 65 && counter_x >= 725 && counter_x < 740) 
 		)
 			begin
 				r_red <= 4'hF;    
@@ -176,6 +224,7 @@ module space_invaders(
 				enemy_y_pos[i] = enemy_y_pos[i] - 100;
 				bullet_y = position_y ;
 				bullet_x = position_x + bullet_size/2;
+				points = points +1;
 			end
 		end
 		
@@ -280,5 +329,15 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 	end
 endmodule
 
+//module intTo7Seq(points, digit1, digit2)
+//	input points;
+//	output reg[6:0] digit1;
+//	output reg[6:0] digit2;
+//	
+//	always@(points)
+//	begin 
+//	end
+//
+//endmodule
 
 	
