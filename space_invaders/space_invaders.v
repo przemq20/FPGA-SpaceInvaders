@@ -44,6 +44,8 @@ module space_invaders(
 	integer enemy_x_pos[6:0];
 	integer enemy_y_pos[6:0];
 	integer enemy_direction[6:0];
+	reg enemy_alive[6:0];
+
 	initial
 	begin
 		for(i=0;i<7;i=i+1)
@@ -51,6 +53,7 @@ module space_invaders(
 			enemy_x_pos[i] = 150 + i*90;
 			enemy_y_pos[i] = 40;
 			enemy_direction[i] = 0;
+			enemy_alive[i] = 1'b1;
 		end
 	end
 
@@ -65,7 +68,10 @@ module space_invaders(
 	
 	reg [6:0] digit1 = 7'b0111111;
 	reg [6:0] digit2 = 7'b0111111;
-	integer points = 0 ;
+	integer points = 0;
+	
+	integer level = 1;
+	integer killed = 0;
 	
 	move_clk update_clk(clk, clk_move);
 	vga_clk vga_reduce(clk, clk25MHz);
@@ -98,7 +104,7 @@ module space_invaders(
 
 	always@(points)
 	begin 
-		case(points%10)
+		case(points % 10) //first digit
 		0: digit1 <= 7'b0111111;
 		1: digit1 <= 7'b0000110;
 		2: digit1 <= 7'b1011011;
@@ -111,7 +117,7 @@ module space_invaders(
 		9: digit1 <= 7'b1101111;
 		endcase
 		
-		case((points%100) / 10)
+		case( (points % 100) / 10) //second digit
 		0: digit2 <= 7'b0111111;
 		1: digit2 <= 7'b0000110;
 		2: digit2 <= 7'b1011011;
@@ -192,11 +198,11 @@ module space_invaders(
 		begin
 			if(enemy_direction[i] == 0) 
 			begin
-				enemy_x_pos[i] = enemy_x_pos[i] + 5;
+				enemy_x_pos[i] = enemy_x_pos[i] + (level*2) +3;
 			end
 			else 
 			begin
-				enemy_x_pos[i] = enemy_x_pos[i] - 5;
+				enemy_x_pos[i] = enemy_x_pos[i] - (level*2) -3;
 			end
 		end
 		
@@ -208,11 +214,13 @@ module space_invaders(
 				enemy_direction[i] = ~enemy_direction[i];
 				enemy_y_pos[i] = enemy_y_pos[i] + enemy_size + 10;
 			end
-			if(enemy_y_pos[i] > 400)
+			if(enemy_y_pos[i] > 400 && enemy_alive[i])
 			begin
 				enemy_y_pos[i] = 40;
+				points = points - 10;
 			end
 		end
+		
 		// handling collisions
 		for(i=0;i<7;i=i+1)
 		begin
@@ -221,17 +229,32 @@ module space_invaders(
 			(bullet_y <= enemy_y_pos[i] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[i])
 			)
 			begin
-				enemy_y_pos[i] = enemy_y_pos[i] - 100;
+				enemy_y_pos[i] = 600;
+				enemy_alive[i] = 1'b0;
 				bullet_y = position_y ;
 				bullet_x = position_x + bullet_size/2;
 				points = points +1;
+				killed = killed +1;
+			end
+		end
+		
+		if(killed == 7)
+		begin 
+			level = level + 1;
+			killed = 0;
+			for(i=0;i<7;i=i+1)
+			begin
+				enemy_x_pos[i] = 150 + i*90;
+				enemy_y_pos[i] = 40;
+				enemy_direction[i] = 0;
+				enemy_alive[i] = 1'b1;
 			end
 		end
 		
 		////////////////////////////////////// VVV BEBLOW CODE IS TO CHANGE
 		//bullet run by clock //todo: change to space
 		bullet_clk = bullet_clk +1;
-		if(bullet_y <=35 ) begin // todo make sure if 30 is ok
+		if(bullet_y <= 35 ) begin // todo make sure if 30 is ok
 			// todo: make sure parameters are ok
 			bullet_y = position_y ;
 			bullet_x = position_x + bullet_size/2;
