@@ -19,7 +19,8 @@ module space_invaders(
 	input kData, 
 	input kClock 
 );
-	integer i;
+	integer i; // for iterations
+	
 	//vga
 	reg [9:0] counter_x = 0;  // horizontal counter
 	reg [9:0] counter_y = 0;  // vertical counter
@@ -32,7 +33,7 @@ module space_invaders(
 	wire clk25MHz;
 	wire clk_move;
 	
-	//logic
+	//player
 	integer size_x = 20;
 	integer size_y = 30;
 	integer position_x = (640/2) + 144;
@@ -65,11 +66,14 @@ module space_invaders(
 	integer bullet_size = 10;
 	wire fired;
 	integer bullet_clk = 0;
+	reg bullet_free = 1'b1;
 	
+	//points
 	reg [6:0] digit1 = 7'b0111111;
 	reg [6:0] digit2 = 7'b0111111;
 	integer points = 0;
 	
+	//logic
 	integer level = 1;
 	integer killed = 0;
 	
@@ -90,12 +94,12 @@ module space_invaders(
 	always @ (posedge clk25MHz)  // vertical counter
 	begin 
 		if (counter_x == 799)  // only counts up 1 count after horizontal finishes 800 counts
-			begin
-				if (counter_y < 525)  // vertical counter (including off-screen vertical 45 pixels) total of 525 pixels
-					counter_y <= counter_y + 1;
-				else
-					counter_y <= 0;              
-			end  
+		begin
+			if (counter_y < 525)  // vertical counter (including off-screen vertical 45 pixels) total of 525 pixels
+				counter_y <= counter_y + 1;
+			else
+				counter_y <= 0;              
+		end  
 	end  
 
    // hsync and vsync output assignments
@@ -175,35 +179,23 @@ module space_invaders(
 	always @ (posedge clk_move)
 	begin
 		if(direction_x == 1)
-		begin
 			position_x = position_x - 10;
-		end
 		else if(direction_x == 2)
-		begin
 			position_x = position_x + 10;
-		end
 		
 		if(position_x > 783 - size_x)
-		begin
 			position_x = 144;
-		end
 		else if(position_x < 144)
-		begin
 			position_x = 783 - size_x;
-		end
 		
 		// enemy
 		// enemy: move x
 		for(i=0;i<7;i=i+1)
 		begin
 			if(enemy_direction[i] == 0) 
-			begin
 				enemy_x_pos[i] = enemy_x_pos[i] + (level*2) +3;
-			end
 			else 
-			begin
 				enemy_x_pos[i] = enemy_x_pos[i] - (level*2) -3;
-			end
 		end
 		
 		// enemy: move down when chaneging a direction
@@ -231,10 +223,10 @@ module space_invaders(
 			begin
 				enemy_y_pos[i] = 600;
 				enemy_alive[i] = 1'b0;
-				bullet_y = position_y ;
-				bullet_x = position_x + bullet_size/2;
+				bullet_y = 0;
 				points = points +1;
 				killed = killed +1;
+				bullet_free = 1'b1;
 			end
 		end
 		
@@ -251,19 +243,24 @@ module space_invaders(
 			end
 		end
 		
-		////////////////////////////////////// VVV BEBLOW CODE IS TO CHANGE
-		//bullet run by clock //todo: change to space
-		bullet_clk = bullet_clk +1;
-		if(bullet_y <= 35 ) begin // todo make sure if 30 is ok
-			// todo: make sure parameters are ok
+		//if bullet is free and space is pushed -> fire the bullet
+		if(fired == 1'b1 && bullet_free == 1'b1)
+		begin
 			bullet_y = position_y ;
 			bullet_x = position_x + bullet_size/2;
+			bullet_free = 1'b0;
 		end
-		/////////////////////////////////////// ^^^ ABOVE CODE IS TO CHANGE
-		// bullet	
-		if(fired == 1'b1) begin
+		
+		//if bullet is busy move the bullet up
+		if(bullet_free == 1'b0)
 			bullet_y = bullet_y - 5;
-			end
+		
+		//if bullet is at the top of the screen mark it as free and move into darkness 
+		if(bullet_y <= 35)
+		begin
+			bullet_y = 0;
+			bullet_free = 1'b1;
+		end
 	end
 
 	
@@ -294,7 +291,7 @@ endmodule
 
 module vga_clk(clk, clk25MHz);
 	input clk; 					//50MHz clock
-	output reg clk25MHz; 		//25MHz clock
+	output reg clk25MHz; 	//25MHz clock
 	
 	always@(posedge clk)
 	begin
@@ -312,9 +309,11 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 	output reg [2:0] direction_x;
 	output reg [9:0] LEDR;
 	output reg fired;
+	
 	initial 
 	begin
 		direction_x = 0;
+		fired = 1'b0;
 	end
 
 	always@(negedge kClock) 
@@ -334,6 +333,7 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 	begin
 		if(prev_code == 8'hF0) // break code
 		begin
+			fired = 1'b0;
 			direction_x = 0;
 		end
 		else if(code == 8'h1C) // a goes left
@@ -344,23 +344,10 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 		begin
 			direction_x = 2;
 		end	
-		else if (code == 8'h29) // space fire (doesn't work)
+		else if (code == 8'h29) // space fire
 		begin 
 			fired = 1'b1;
 		end
-
 	end
 endmodule
-
-//module intTo7Seq(points, digit1, digit2)
-//	input points;
-//	output reg[6:0] digit1;
-//	output reg[6:0] digit2;
-//	
-//	always@(points)
-//	begin 
-//	end
-//
-//endmodule
-
 	
