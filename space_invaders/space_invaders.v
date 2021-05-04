@@ -76,6 +76,8 @@ module space_invaders(
 	//logic
 	integer level = 1;
 	integer killed = 0;
+	reg pause = 1'b1;
+	reg lost = 1'b0;
 	
 	move_clk update_clk(clk, clk_move);
 	vga_clk vga_reduce(clk, clk25MHz);
@@ -176,93 +178,121 @@ module space_invaders(
 			end
 	end
 	
-	always @ (posedge clk_move)
+	always@(posedge clk_move)
 	begin
-		if(direction_x == 1)
-			position_x = position_x - 10;
-		else if(direction_x == 2)
-			position_x = position_x + 10;
+		if(KEY[0] == 1'b0)
+			pause = 1'b1;
 		
-		if(position_x > 783 - size_x)
-			position_x = 144;
-		else if(position_x < 144)
-			position_x = 783 - size_x;
-		
-		// enemy
-		// enemy: move x
-		for(i=0;i<7;i=i+1)
+		if(KEY[1] == 1'b0)
 		begin
-			if(enemy_direction[i] == 0) 
-				enemy_x_pos[i] = enemy_x_pos[i] + (level*2) +3;
-			else 
-				enemy_x_pos[i] = enemy_x_pos[i] - (level*2) -3;
+			pause = 1'b0;
+			if(lost == 1'b1)
+			begin
+				lost = 1'b0;
+				level = 1;
+				killed = 0;
+				position_x = (640/2) + 144;
+				position_y = 450;
+				
+				for(i=0;i<7;i=i+1)
+				begin
+					enemy_x_pos[i] = 150 + i*90;
+					enemy_y_pos[i] = 40;
+					enemy_direction[i] = 0;
+					enemy_alive[i] = 1'b1;
+				end
+			end
+				
 		end
 		
-		// enemy: move down when chaneging a direction
-		for(i=0;i<7;i=i+1)
+		if(pause == 1'b0 && lost == 1'b0 )
 		begin
-			if(enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144)		
-			begin
-				enemy_direction[i] = ~enemy_direction[i];
-				enemy_y_pos[i] = enemy_y_pos[i] + enemy_size + 10;
-			end
-			if(enemy_y_pos[i] > 400 && enemy_alive[i])
-			begin
-				enemy_y_pos[i] = 40;
-				points = points - 10;
-			end
-		end
 		
-		// handling collisions
-		for(i=0;i<7;i=i+1)
-		begin
-			if(
-			(bullet_x <= enemy_x_pos[i] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[i]) &&
-			(bullet_y <= enemy_y_pos[i] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[i])
-			)
+			if(direction_x == 1)
+				position_x = position_x - 10;
+			else if(direction_x == 2)
+				position_x = position_x + 10;
+			
+			if(position_x > 783 - size_x)
+				position_x = 144;
+			else if(position_x < 144)
+				position_x = 783 - size_x;
+			
+			// enemy
+			// enemy: move x
+			for(i=0;i<7;i=i+1)
 			begin
-				enemy_y_pos[i] = 600;
-				enemy_alive[i] = 1'b0;
+				if(enemy_direction[i] == 0) 
+					enemy_x_pos[i] = enemy_x_pos[i] + (level*2) +3;
+				else 
+					enemy_x_pos[i] = enemy_x_pos[i] - (level*2) -3;
+			end
+			
+			// enemy: move down when chaneging a direction
+			for(i=0;i<7;i=i+1)
+			begin
+				if(enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144)		
+				begin
+					enemy_direction[i] = ~enemy_direction[i];
+					enemy_y_pos[i] = enemy_y_pos[i] + enemy_size + 10;
+				end
+				if(enemy_y_pos[i] > 400 && enemy_alive[i])
+				begin
+					enemy_y_pos[i] = 40;
+					lost = 1'b1;
+				end
+			end
+			
+			// handling collisions
+			for(i=0;i<7;i=i+1)
+			begin
+				if(
+				(bullet_x <= enemy_x_pos[i] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[i]) &&
+				(bullet_y <= enemy_y_pos[i] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[i])
+				)
+				begin
+					enemy_y_pos[i] = 600;
+					enemy_alive[i] = 1'b0;
+					bullet_y = 0;
+					points = points +1;
+					killed = killed +1;
+					bullet_free = 1'b1;
+				end
+			end
+			
+			if(killed == 7)
+			begin 
+				level = level + 1;
+				killed = 0;
+				for(i=0;i<7;i=i+1)
+				begin
+					enemy_x_pos[i] = 150 + i*90;
+					enemy_y_pos[i] = 40;
+					enemy_direction[i] = 0;
+					enemy_alive[i] = 1'b1;
+				end
+			end
+			
+			//if bullet is free and space is pushed -> fire the bullet
+			if(fired == 1'b1 && bullet_free == 1'b1)
+			begin
+				bullet_y = position_y ;
+				bullet_x = position_x + bullet_size/2;
+				bullet_free = 1'b0;
+			end
+			
+			//if bullet is busy move the bullet up
+			if(bullet_free == 1'b0)
+				bullet_y = bullet_y - 5;
+			
+			//if bullet is at the top of the screen mark it as free and move into darkness 
+			if(bullet_y <= 35)
+			begin
 				bullet_y = 0;
-				points = points +1;
-				killed = killed +1;
 				bullet_free = 1'b1;
 			end
 		end
-		
-		if(killed == 7)
-		begin 
-			level = level + 1;
-			killed = 0;
-			for(i=0;i<7;i=i+1)
-			begin
-				enemy_x_pos[i] = 150 + i*90;
-				enemy_y_pos[i] = 40;
-				enemy_direction[i] = 0;
-				enemy_alive[i] = 1'b1;
-			end
-		end
-		
-		//if bullet is free and space is pushed -> fire the bullet
-		if(fired == 1'b1 && bullet_free == 1'b1)
-		begin
-			bullet_y = position_y ;
-			bullet_x = position_x + bullet_size/2;
-			bullet_free = 1'b0;
-		end
-		
-		//if bullet is busy move the bullet up
-		if(bullet_free == 1'b0)
-			bullet_y = bullet_y - 5;
-		
-		//if bullet is at the top of the screen mark it as free and move into darkness 
-		if(bullet_y <= 35)
-		begin
-			bullet_y = 0;
-			bullet_free = 1'b1;
-		end
 	end
-
 	
 	// color output assignments
 	// only output the colors if the counters are within the adressable video time constraints
@@ -339,10 +369,12 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 		else if(code == 8'h1C) // a goes left
 		begin
 			direction_x = 1;
+			fired = 1'b0;
 		end	
 		else if(code == 8'h23) // d goes right
 		begin
 			direction_x = 2;
+			fired = 1'b0;
 		end	
 		else if (code == 8'h29) // space fire
 		begin 
