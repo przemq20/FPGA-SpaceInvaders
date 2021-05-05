@@ -9,7 +9,7 @@ module space_invaders(
 
 	//////////// LED //////////
 	output [9:0] LEDR,
-	input [1:0] KEY,
+	input  [1:0] KEY,
 	//////////// VGA //////////
 	output VGA_hSync,
 	output VGA_vSync, 
@@ -20,7 +20,7 @@ module space_invaders(
 	input kClock 
 );
 	integer i; // for iterations
-	
+	integer j;
 	//vga
 	reg [9:0] counter_x = 0;  // horizontal counter
 	reg [9:0] counter_y = 0;  // vertical counter
@@ -42,18 +42,17 @@ module space_invaders(
 	integer direction_y = 0;
 	
 	// enemy	
-	integer enemy_x_pos[6:0];
-	integer enemy_y_pos[6:0];
-	integer enemy_direction[6:0];
-	reg enemy_alive[6:0];
+	integer enemy_x_pos[8:0];
+	integer enemy_y_pos[8:0];
+	reg enemy_direction = 1'b0;
+	reg enemy_alive[8:0];
 
 	initial
 	begin
-		for(i=0;i<7;i=i+1)
+		for(i=0;i<9;i=i+1)
 		begin
-			enemy_x_pos[i] = 150 + i*90;
+			enemy_x_pos[i] = 200 + i*60;
 			enemy_y_pos[i] = 40;
-			enemy_direction[i] = 0;
 			enemy_alive[i] = 1'b1;
 		end
 	end
@@ -147,6 +146,9 @@ module space_invaders(
 		(counter_y >= enemy_y_pos[4] && counter_y < enemy_y_pos[4] + enemy_size && counter_x >= enemy_x_pos[4] && counter_x < enemy_x_pos[4] + enemy_size) ||
 		(counter_y >= enemy_y_pos[5] && counter_y < enemy_y_pos[5] + enemy_size && counter_x >= enemy_x_pos[5] && counter_x < enemy_x_pos[5] + enemy_size) ||
 		(counter_y >= enemy_y_pos[6] && counter_y < enemy_y_pos[6] + enemy_size && counter_x >= enemy_x_pos[6] && counter_x < enemy_x_pos[6] + enemy_size) ||
+		(counter_y >= enemy_y_pos[7] && counter_y < enemy_y_pos[7] + enemy_size && counter_x >= enemy_x_pos[7] && counter_x < enemy_x_pos[7] + enemy_size) ||
+		(counter_y >= enemy_y_pos[8] && counter_y < enemy_y_pos[8] + enemy_size && counter_x >= enemy_x_pos[8] && counter_x < enemy_x_pos[8] + enemy_size) ||
+
 		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size) ||
 		
 		(digit1[0] && counter_y >= 40 && counter_y < 45 && counter_x >= 755 && counter_x < 770) ||
@@ -193,12 +195,12 @@ module space_invaders(
 				killed = 0;
 				position_x = (640/2) + 144;
 				position_y = 450;
-				
-				for(i=0;i<7;i=i+1)
+				enemy_direction = 1'b0;
+
+				for(i=0;i<9;i=i+1)
 				begin
-					enemy_x_pos[i] = 150 + i*90;
+					enemy_x_pos[i] = 200 + i*60;
 					enemy_y_pos[i] = 40;
-					enemy_direction[i] = 0;
 					enemy_alive[i] = 1'b1;
 				end
 			end
@@ -220,22 +222,27 @@ module space_invaders(
 			
 			// enemy
 			// enemy: move x
-			for(i=0;i<7;i=i+1)
+			for(i=0;i<9;i=i+1)
 			begin
-				if(enemy_direction[i] == 0) 
-					enemy_x_pos[i] = enemy_x_pos[i] + (level*2) +3;
+				if(enemy_direction == 1'b0) 
+					enemy_x_pos[i] = enemy_x_pos[i] + (level*2);
 				else 
-					enemy_x_pos[i] = enemy_x_pos[i] - (level*2) -3;
+					enemy_x_pos[i] = enemy_x_pos[i] - (level*2);
 			end
 			
 			// enemy: move down when chaneging a direction
-			for(i=0;i<7;i=i+1)
+			for(i=0;i<9;i=i+1)
 			begin
-				if(enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144)		
+				if((enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144) && enemy_alive[i])		
 				begin
-					enemy_direction[i] = ~enemy_direction[i];
-					enemy_y_pos[i] = enemy_y_pos[i] + enemy_size + 10;
+					enemy_direction = ~enemy_direction;
+					for(j=0;j<9;j=j+1)
+					begin
+						if(enemy_alive[j])
+						enemy_y_pos[j] = enemy_y_pos[j] + enemy_size + 10;
+					end
 				end
+				
 				if(enemy_y_pos[i] > 400 && enemy_alive[i])
 				begin
 					enemy_y_pos[i] = 40;
@@ -244,7 +251,7 @@ module space_invaders(
 			end
 			
 			// handling collisions
-			for(i=0;i<7;i=i+1)
+			for(i=0;i<9;i=i+1)
 			begin
 				if(
 				(bullet_x <= enemy_x_pos[i] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[i]) &&
@@ -260,15 +267,15 @@ module space_invaders(
 				end
 			end
 			
-			if(killed == 7)
+			if(killed == 9)
 			begin 
 				level = level + 1;
 				killed = 0;
-				for(i=0;i<7;i=i+1)
+				enemy_direction = 1'b0;
+				for(i=0;i<9;i=i+1)
 				begin
-					enemy_x_pos[i] = 150 + i*90;
+					enemy_x_pos[i] = 200 + i*60;
 					enemy_y_pos[i] = 40;
-					enemy_direction[i] = 0;
 					enemy_alive[i] = 1'b1;
 				end
 			end
