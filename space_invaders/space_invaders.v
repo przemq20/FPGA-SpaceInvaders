@@ -42,19 +42,105 @@ module space_invaders(
 	integer direction_y = 0;
 	
 	// enemy	
-	integer enemy_x_pos[8:0];
-	integer enemy_y_pos[8:0];
+	integer enemy_x_pos[17:0];
+	integer enemy_y_pos[17:0];
 	reg enemy_direction = 1'b0;
-	reg enemy_alive[8:0];
+	reg enemy_alive[17:0];
+	
+	//obstacles
+	integer obstacle_x_pos[3:0];
+	integer obstacle_y_pos[3:0];
+	integer obstacle_life[3:0];
+	integer obstacle_x_size = 50;
+	integer obstacle_y_size = 20;
 
 	initial
 	begin
-		for(i=0;i<9;i=i+1)
-		begin
-			enemy_x_pos[i] = 200 + i*60;
-			enemy_y_pos[i] = 40;
-			enemy_alive[i] = 1'b1;
-		end
+		obstacle_x_pos[0] = 247;
+		obstacle_y_pos[0] = 400;
+		obstacle_x_pos[1] = 375;
+		obstacle_y_pos[1] = 400;
+		obstacle_x_pos[2] = 503;
+		obstacle_y_pos[2] = 400;
+		obstacle_x_pos[3] = 631;
+		obstacle_y_pos[3] = 400;
+		
+		obstacle_life[0] = 4;
+		obstacle_life[1] = 4;
+		obstacle_life[2] = 4;
+		obstacle_life[3] = 4;
+		
+		enemy_x_pos[0] = 200;
+		enemy_y_pos[0] = 40;
+		enemy_alive[0] = 1'b1;
+
+		enemy_x_pos[1] = 260;
+		enemy_y_pos[1] = 40;
+		enemy_alive[1] = 1'b1;		
+		
+		enemy_x_pos[2] = 320;
+		enemy_y_pos[2] = 40;
+		enemy_alive[2] = 1'b1;
+
+		enemy_x_pos[3] = 380;
+		enemy_y_pos[3] = 40;
+		enemy_alive[3] = 1'b1;	
+		
+		enemy_x_pos[4] = 440;
+		enemy_y_pos[4] = 40;
+		enemy_alive[4] = 1'b1;
+
+		enemy_x_pos[5] = 500;
+		enemy_y_pos[5] = 40;
+		enemy_alive[5] = 1'b1;		
+		
+		enemy_x_pos[6] = 560;
+		enemy_y_pos[6] = 40;
+		enemy_alive[6] = 1'b1;
+
+		enemy_x_pos[7] = 620;
+		enemy_y_pos[7] = 40;
+		enemy_alive[7] = 1'b1;	
+		
+		enemy_x_pos[8] = 680;
+		enemy_y_pos[8] = 40;
+		enemy_alive[8] = 1'b1;	
+		
+		enemy_x_pos[9] = 200;
+		enemy_y_pos[9] = 100;
+		enemy_alive[9] = 1'b1;
+
+		enemy_x_pos[10] = 260;
+		enemy_y_pos[10] = 100;
+		enemy_alive[10] = 1'b1;		
+		
+		enemy_x_pos[11] = 320;
+		enemy_y_pos[11] = 100;
+		enemy_alive[11] = 1'b1;
+
+		enemy_x_pos[12] = 380;
+		enemy_y_pos[12] = 100;
+		enemy_alive[12] = 1'b1;	
+		
+		enemy_x_pos[13] = 440;
+		enemy_y_pos[13] = 100;
+		enemy_alive[13] = 1'b1;
+
+		enemy_x_pos[14] = 500;
+		enemy_y_pos[14] = 100;
+		enemy_alive[14] = 1'b1;		
+		
+		enemy_x_pos[15] = 560;
+		enemy_y_pos[15] = 100;
+		enemy_alive[15] = 1'b1;
+
+		enemy_x_pos[16] = 620;
+		enemy_y_pos[16] = 100;
+		enemy_alive[16] = 1'b1;	
+		
+		enemy_x_pos[17] = 680;
+		enemy_y_pos[17] = 100;
+		enemy_alive[17] = 1'b1;	
 	end
 
 	integer enemy_size = 20;
@@ -148,9 +234,24 @@ module space_invaders(
 		(counter_y >= enemy_y_pos[6] && counter_y < enemy_y_pos[6] + enemy_size && counter_x >= enemy_x_pos[6] && counter_x < enemy_x_pos[6] + enemy_size) ||
 		(counter_y >= enemy_y_pos[7] && counter_y < enemy_y_pos[7] + enemy_size && counter_x >= enemy_x_pos[7] && counter_x < enemy_x_pos[7] + enemy_size) ||
 		(counter_y >= enemy_y_pos[8] && counter_y < enemy_y_pos[8] + enemy_size && counter_x >= enemy_x_pos[8] && counter_x < enemy_x_pos[8] + enemy_size) ||
+		(counter_y >= enemy_y_pos[9] && counter_y < enemy_y_pos[9] + enemy_size && counter_x >= enemy_x_pos[9] && counter_x < enemy_x_pos[9] + enemy_size) ||
+		(counter_y >= enemy_y_pos[10] && counter_y < enemy_y_pos[10] + enemy_size && counter_x >= enemy_x_pos[10] && counter_x < enemy_x_pos[10] + enemy_size) ||
+		(counter_y >= enemy_y_pos[11] && counter_y < enemy_y_pos[11] + enemy_size && counter_x >= enemy_x_pos[11] && counter_x < enemy_x_pos[11] + enemy_size) ||
+		(counter_y >= enemy_y_pos[12] && counter_y < enemy_y_pos[12] + enemy_size && counter_x >= enemy_x_pos[12] && counter_x < enemy_x_pos[12] + enemy_size) ||
+		(counter_y >= enemy_y_pos[13] && counter_y < enemy_y_pos[13] + enemy_size && counter_x >= enemy_x_pos[13] && counter_x < enemy_x_pos[13] + enemy_size) ||
+		(counter_y >= enemy_y_pos[14] && counter_y < enemy_y_pos[14] + enemy_size && counter_x >= enemy_x_pos[14] && counter_x < enemy_x_pos[14] + enemy_size) ||
+		(counter_y >= enemy_y_pos[15] && counter_y < enemy_y_pos[15] + enemy_size && counter_x >= enemy_x_pos[15] && counter_x < enemy_x_pos[15] + enemy_size) ||
+		(counter_y >= enemy_y_pos[16] && counter_y < enemy_y_pos[16] + enemy_size && counter_x >= enemy_x_pos[16] && counter_x < enemy_x_pos[16] + enemy_size) ||
+		(counter_y >= enemy_y_pos[17] && counter_y < enemy_y_pos[17] + enemy_size && counter_x >= enemy_x_pos[17] && counter_x < enemy_x_pos[17] + enemy_size) ||
 
+		
 		(counter_y >= bullet_y && counter_y < bullet_y + bullet_size && counter_x >= bullet_x && counter_x < bullet_x + bullet_size) ||
 		
+		((counter_y >= obstacle_y_pos[0] && counter_y < obstacle_y_pos[0] + obstacle_y_size && counter_x >= obstacle_x_pos[0] && counter_x < obstacle_x_pos[0] + obstacle_x_size) && obstacle_life[0] > 0) ||
+		((counter_y >= obstacle_y_pos[1] && counter_y < obstacle_y_pos[1] + obstacle_y_size && counter_x >= obstacle_x_pos[1] && counter_x < obstacle_x_pos[1] + obstacle_x_size) && obstacle_life[1] > 0) ||
+		((counter_y >= obstacle_y_pos[2] && counter_y < obstacle_y_pos[2] + obstacle_y_size && counter_x >= obstacle_x_pos[2] && counter_x < obstacle_x_pos[2] + obstacle_x_size) && obstacle_life[2] > 0) ||
+		((counter_y >= obstacle_y_pos[3] && counter_y < obstacle_y_pos[3] + obstacle_y_size && counter_x >= obstacle_x_pos[3] && counter_x < obstacle_x_pos[3] + obstacle_x_size) && obstacle_life[3] > 0) ||
+
 		(digit1[0] && counter_y >= 40 && counter_y < 45 && counter_x >= 755 && counter_x < 770) ||
 		(digit1[1] && counter_y >= 45 && counter_y < 60 && counter_x >= 770 && counter_x < 775) ||
 		(digit1[2] && counter_y >= 65 && counter_y < 80 && counter_x >= 770 && counter_x < 775) ||
@@ -193,16 +294,93 @@ module space_invaders(
 				lost = 1'b0;
 				level = 1;
 				killed = 0;
-				position_x = (640/2) + 144;
-				position_y = 450;
-				enemy_direction = 1'b0;
+				points = 0;
+				
+				enemy_x_pos[0] = 200;
+				enemy_y_pos[0] = 40;
+				enemy_alive[0] = 1'b1;
 
-				for(i=0;i<9;i=i+1)
-				begin
-					enemy_x_pos[i] = 200 + i*60;
-					enemy_y_pos[i] = 40;
-					enemy_alive[i] = 1'b1;
-				end
+				enemy_x_pos[1] = 260;
+				enemy_y_pos[1] = 40;
+				enemy_alive[1] = 1'b1;		
+				
+				enemy_x_pos[2] = 320;
+				enemy_y_pos[2] = 40;
+				enemy_alive[2] = 1'b1;
+
+				enemy_x_pos[3] = 380;
+				enemy_y_pos[3] = 40;
+				enemy_alive[3] = 1'b1;	
+				
+				enemy_x_pos[4] = 440;
+				enemy_y_pos[4] = 40;
+				enemy_alive[4] = 1'b1;
+
+				enemy_x_pos[5] = 500;
+				enemy_y_pos[5] = 40;
+				enemy_alive[5] = 1'b1;		
+				
+				enemy_x_pos[6] = 560;
+				enemy_y_pos[6] = 40;
+				enemy_alive[6] = 1'b1;
+
+				enemy_x_pos[7] = 620;
+				enemy_y_pos[7] = 40;
+				enemy_alive[7] = 1'b1;	
+				
+				enemy_x_pos[8] = 680;
+				enemy_y_pos[8] = 40;
+				enemy_alive[8] = 1'b1;	
+				
+				enemy_x_pos[9] = 200;
+				enemy_y_pos[9] = 100;
+				enemy_alive[9] = 1'b1;
+
+				enemy_x_pos[10] = 260;
+				enemy_y_pos[10] = 100;
+				enemy_alive[10] = 1'b1;		
+				
+				enemy_x_pos[11] = 320;
+				enemy_y_pos[11] = 100;
+				enemy_alive[11] = 1'b1;
+
+				enemy_x_pos[12] = 380;
+				enemy_y_pos[12] = 100;
+				enemy_alive[12] = 1'b1;	
+				
+				enemy_x_pos[13] = 440;
+				enemy_y_pos[13] = 100;
+				enemy_alive[13] = 1'b1;
+
+				enemy_x_pos[14] = 500;
+				enemy_y_pos[14] = 100;
+				enemy_alive[14] = 1'b1;		
+				
+				enemy_x_pos[15] = 560;
+				enemy_y_pos[15] = 100;
+				enemy_alive[15] = 1'b1;
+
+				enemy_x_pos[16] = 620;
+				enemy_y_pos[16] = 100;
+				enemy_alive[16] = 1'b1;	
+				
+				enemy_x_pos[17] = 680;
+				enemy_y_pos[17] = 100;
+				enemy_alive[17] = 1'b1;		
+				
+				obstacle_x_pos[0] = 247;
+				obstacle_y_pos[0] = 400;
+				obstacle_x_pos[1] = 375;
+				obstacle_y_pos[1] = 400;
+				obstacle_x_pos[2] = 503;
+				obstacle_y_pos[2] = 400;
+				obstacle_x_pos[3] = 631;
+				obstacle_y_pos[3] = 400;
+				
+				obstacle_life[0] = 4;
+				obstacle_life[1] = 4;
+				obstacle_life[2] = 4;
+				obstacle_life[3] = 4;
 			end
 				
 		end
@@ -222,62 +400,487 @@ module space_invaders(
 			
 			// enemy
 			// enemy: move x
-			for(i=0;i<9;i=i+1)
 			begin
-				if(enemy_direction == 1'b0) 
-					enemy_x_pos[i] = enemy_x_pos[i] + (level*2);
+				if(enemy_direction == 1'b0)
+				begin	
+					enemy_x_pos[0] = enemy_x_pos[0] + (level*2);
+					enemy_x_pos[1] = enemy_x_pos[1] + (level*2);
+					enemy_x_pos[2] = enemy_x_pos[2] + (level*2);
+					enemy_x_pos[3] = enemy_x_pos[3] + (level*2);
+					enemy_x_pos[4] = enemy_x_pos[4] + (level*2);
+					enemy_x_pos[5] = enemy_x_pos[5] + (level*2);
+					enemy_x_pos[6] = enemy_x_pos[6] + (level*2);
+					enemy_x_pos[7] = enemy_x_pos[7] + (level*2);
+					enemy_x_pos[8] = enemy_x_pos[8] + (level*2);
+					enemy_x_pos[9] = enemy_x_pos[9] + (level*2);
+					enemy_x_pos[10] = enemy_x_pos[10] + (level*2);
+					enemy_x_pos[11] = enemy_x_pos[11] + (level*2);
+					enemy_x_pos[12] = enemy_x_pos[12] + (level*2);
+					enemy_x_pos[13] = enemy_x_pos[13] + (level*2);
+					enemy_x_pos[14] = enemy_x_pos[14] + (level*2);
+					enemy_x_pos[15] = enemy_x_pos[15] + (level*2);
+					enemy_x_pos[16] = enemy_x_pos[16] + (level*2);
+					enemy_x_pos[17] = enemy_x_pos[17] + (level*2);
+				end
 				else 
-					enemy_x_pos[i] = enemy_x_pos[i] - (level*2);
+				begin
+					enemy_x_pos[0] = enemy_x_pos[0] - (level*2);
+					enemy_x_pos[1] = enemy_x_pos[1] - (level*2);
+					enemy_x_pos[2] = enemy_x_pos[2] - (level*2);
+					enemy_x_pos[3] = enemy_x_pos[3] - (level*2);
+					enemy_x_pos[4] = enemy_x_pos[4] - (level*2);
+					enemy_x_pos[5] = enemy_x_pos[5] - (level*2);
+					enemy_x_pos[6] = enemy_x_pos[6] - (level*2);
+					enemy_x_pos[7] = enemy_x_pos[7] - (level*2);
+					enemy_x_pos[8] = enemy_x_pos[8] - (level*2);
+					enemy_x_pos[9] = enemy_x_pos[9] - (level*2);
+					enemy_x_pos[10] = enemy_x_pos[10] - (level*2);
+					enemy_x_pos[11] = enemy_x_pos[11] - (level*2);
+					enemy_x_pos[12] = enemy_x_pos[12] - (level*2);
+					enemy_x_pos[13] = enemy_x_pos[13] - (level*2);
+					enemy_x_pos[14] = enemy_x_pos[14] - (level*2);
+					enemy_x_pos[15] = enemy_x_pos[15] - (level*2);
+					enemy_x_pos[16] = enemy_x_pos[16] - (level*2);
+					enemy_x_pos[17] = enemy_x_pos[17] - (level*2);
+				end
 			end
 			
 			// enemy: move down when chaneging a direction
-			for(i=0;i<9;i=i+1)
+			if(((enemy_x_pos[0] > 784 || enemy_x_pos[0] + enemy_size < 144) && enemy_alive[0]) || 
+			((enemy_x_pos[1] > 784 || enemy_x_pos[1] + enemy_size < 144) && enemy_alive[1]) ||
+			((enemy_x_pos[2] > 784 || enemy_x_pos[2] + enemy_size < 144) && enemy_alive[2]) ||
+			((enemy_x_pos[3] > 784 || enemy_x_pos[3] + enemy_size < 144) && enemy_alive[3]) ||
+			((enemy_x_pos[4] > 784 || enemy_x_pos[4] + enemy_size < 144) && enemy_alive[4]) ||
+			((enemy_x_pos[5] > 784 || enemy_x_pos[5] + enemy_size < 144) && enemy_alive[5]) ||
+			((enemy_x_pos[6] > 784 || enemy_x_pos[6] + enemy_size < 144) && enemy_alive[6]) ||
+			((enemy_x_pos[7] > 784 || enemy_x_pos[7] + enemy_size < 144) && enemy_alive[7]) ||
+			((enemy_x_pos[8] > 784 || enemy_x_pos[8] + enemy_size < 144) && enemy_alive[8]) ||
+			((enemy_x_pos[9] > 784 || enemy_x_pos[9] + enemy_size < 144) && enemy_alive[9]) || 
+			((enemy_x_pos[10] > 784 || enemy_x_pos[10] + enemy_size < 144) && enemy_alive[10]) ||
+			((enemy_x_pos[11] > 784 || enemy_x_pos[11] + enemy_size < 144) && enemy_alive[11]) ||
+			((enemy_x_pos[12] > 784 || enemy_x_pos[12] + enemy_size < 144) && enemy_alive[12]) ||
+			((enemy_x_pos[13] > 784 || enemy_x_pos[13] + enemy_size < 144) && enemy_alive[13]) ||
+			((enemy_x_pos[14] > 784 || enemy_x_pos[14] + enemy_size < 144) && enemy_alive[14]) ||
+			((enemy_x_pos[15] > 784 || enemy_x_pos[15] + enemy_size < 144) && enemy_alive[15]) ||
+			((enemy_x_pos[16] > 784 || enemy_x_pos[16] + enemy_size < 144) && enemy_alive[16]) ||
+			((enemy_x_pos[17] > 784 || enemy_x_pos[17] + enemy_size < 144) && enemy_alive[17])
+			)		
 			begin
-				if((enemy_x_pos[i] > 784 || enemy_x_pos[i] + enemy_size < 144) && enemy_alive[i])		
-				begin
-					enemy_direction = ~enemy_direction;
-					for(j=0;j<9;j=j+1)
-					begin
-						if(enemy_alive[j])
-						enemy_y_pos[j] = enemy_y_pos[j] + enemy_size + 10;
-					end
-				end
+				enemy_direction = ~enemy_direction;
+				if(enemy_alive[0]) enemy_y_pos[0] = enemy_y_pos[0] + enemy_size;
+				if(enemy_alive[1]) enemy_y_pos[1] = enemy_y_pos[1] + enemy_size;
+				if(enemy_alive[2]) enemy_y_pos[2] = enemy_y_pos[2] + enemy_size;
+				if(enemy_alive[3]) enemy_y_pos[3] = enemy_y_pos[3] + enemy_size;
+				if(enemy_alive[4]) enemy_y_pos[4] = enemy_y_pos[4] + enemy_size;
+				if(enemy_alive[5]) enemy_y_pos[5] = enemy_y_pos[5] + enemy_size;
+				if(enemy_alive[6]) enemy_y_pos[6] = enemy_y_pos[6] + enemy_size;
+				if(enemy_alive[7]) enemy_y_pos[7] = enemy_y_pos[7] + enemy_size;
+				if(enemy_alive[8]) enemy_y_pos[8] = enemy_y_pos[8] + enemy_size;
+				if(enemy_alive[9]) enemy_y_pos[9] = enemy_y_pos[9] + enemy_size;
+				if(enemy_alive[10]) enemy_y_pos[10] = enemy_y_pos[10] + enemy_size;
+				if(enemy_alive[11]) enemy_y_pos[11] = enemy_y_pos[11] + enemy_size;
+				if(enemy_alive[12]) enemy_y_pos[12] = enemy_y_pos[12] + enemy_size;
+				if(enemy_alive[13]) enemy_y_pos[13] = enemy_y_pos[13] + enemy_size;
+				if(enemy_alive[14]) enemy_y_pos[14] = enemy_y_pos[14] + enemy_size;
+				if(enemy_alive[15]) enemy_y_pos[15] = enemy_y_pos[15] + enemy_size;
+				if(enemy_alive[16]) enemy_y_pos[16] = enemy_y_pos[16] + enemy_size;
+				if(enemy_alive[17]) enemy_y_pos[17] = enemy_y_pos[17] + enemy_size;
+			end
 				
-				if(enemy_y_pos[i] > 400 && enemy_alive[i])
-				begin
-					enemy_y_pos[i] = 40;
-					lost = 1'b1;
-				end
-			end
-			
-			// handling collisions
-			for(i=0;i<9;i=i+1)
+			if((enemy_y_pos[0] + enemy_size > 400 && enemy_alive[0]) ||
+			(enemy_y_pos[1] + enemy_size > 400 && enemy_alive[1]) ||
+			(enemy_y_pos[2] + enemy_size > 400 && enemy_alive[2]) ||
+			(enemy_y_pos[3] + enemy_size > 400 && enemy_alive[3]) ||
+			(enemy_y_pos[4] + enemy_size > 400 && enemy_alive[4]) ||
+			(enemy_y_pos[5] + enemy_size > 400 && enemy_alive[5]) ||
+			(enemy_y_pos[6] + enemy_size > 400 && enemy_alive[6]) ||
+			(enemy_y_pos[7] + enemy_size > 400 && enemy_alive[7]) ||
+			(enemy_y_pos[8] + enemy_size > 400 && enemy_alive[8]) ||
+			(enemy_y_pos[9] + enemy_size > 400 && enemy_alive[9]) ||
+			(enemy_y_pos[10] + enemy_size > 400 && enemy_alive[10]) ||
+			(enemy_y_pos[11] + enemy_size > 400 && enemy_alive[11]) ||
+			(enemy_y_pos[12] + enemy_size > 400 && enemy_alive[12]) ||
+			(enemy_y_pos[13] + enemy_size > 400 && enemy_alive[13]) ||
+			(enemy_y_pos[14] + enemy_size > 400 && enemy_alive[14]) ||
+			(enemy_y_pos[15] + enemy_size > 400 && enemy_alive[15]) ||
+			(enemy_y_pos[16] + enemy_size > 400 && enemy_alive[16]) ||
+			(enemy_y_pos[17] + enemy_size > 400 && enemy_alive[17]) 
+			)
 			begin
-				if(
-				(bullet_x <= enemy_x_pos[i] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[i]) &&
-				(bullet_y <= enemy_y_pos[i] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[i])
-				)
-				begin
-					enemy_y_pos[i] = 600;
-					enemy_alive[i] = 1'b0;
-					bullet_y = 0;
-					points = points +1;
-					killed = killed +1;
-					bullet_free = 1'b1;
-				end
+				lost = 1'b1;
 			end
 			
-			if(killed == 9)
+			// handling collisions - enemy-bullet
+			if(
+			(bullet_x <= enemy_x_pos[0] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[0]) &&
+			(bullet_y <= enemy_y_pos[0] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[0])
+			)
+			begin
+				enemy_y_pos[0] = 600;
+				enemy_alive[0] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+		
+			if(
+			(bullet_x <= enemy_x_pos[1] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[1]) &&
+			(bullet_y <= enemy_y_pos[1] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[1])
+			)
+			begin
+				enemy_y_pos[1] = 600;
+				enemy_alive[1] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[2] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[2]) &&
+			(bullet_y <= enemy_y_pos[2] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[2])
+			)
+			begin
+				enemy_y_pos[2] = 600;
+				enemy_alive[2] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[3] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[3]) &&
+			(bullet_y <= enemy_y_pos[3] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[3])
+			)
+			begin
+				enemy_y_pos[3] = 600;
+				enemy_alive[3] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+		
+			if(
+			(bullet_x <= enemy_x_pos[4] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[4]) &&
+			(bullet_y <= enemy_y_pos[4] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[4])
+			)
+			begin
+				enemy_y_pos[4] = 600;
+				enemy_alive[4] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[5] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[5]) &&
+			(bullet_y <= enemy_y_pos[5] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[5])
+			)
+			begin
+				enemy_y_pos[5] = 600;
+				enemy_alive[5] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[6] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[6]) &&
+			(bullet_y <= enemy_y_pos[6] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[6])
+			)
+			begin
+				enemy_y_pos[6] = 600;
+				enemy_alive[6] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+		
+			if(
+			(bullet_x <= enemy_x_pos[7] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[7]) &&
+			(bullet_y <= enemy_y_pos[7] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[7])
+			)
+			begin
+				enemy_y_pos[7] = 600;
+				enemy_alive[7] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[8] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[8]) &&
+			(bullet_y <= enemy_y_pos[8] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[8])
+			)
+			begin
+				enemy_y_pos[8] = 600;
+				enemy_alive[8] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[9] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[9]) &&
+			(bullet_y <= enemy_y_pos[9] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[9])
+			)
+			begin
+				enemy_y_pos[9] = 600;
+				enemy_alive[9] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+		
+			if(
+			(bullet_x <= enemy_x_pos[10] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[10]) &&
+			(bullet_y <= enemy_y_pos[10] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[10])
+			)
+			begin
+				enemy_y_pos[10] = 600;
+				enemy_alive[10] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[11] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[11]) &&
+			(bullet_y <= enemy_y_pos[11] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[11])
+			)
+			begin
+				enemy_y_pos[11] = 600;
+				enemy_alive[11] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[12] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[12]) &&
+			(bullet_y <= enemy_y_pos[12] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[12])
+			)
+			begin
+				enemy_y_pos[12] = 600;
+				enemy_alive[12] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[13] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[13]) &&
+			(bullet_y <= enemy_y_pos[13] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[13])
+			)
+			begin
+				enemy_y_pos[13] = 600;
+				enemy_alive[13] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[14] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[14]) &&
+			(bullet_y <= enemy_y_pos[14] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[14])
+			)
+			begin
+				enemy_y_pos[14] = 600;
+				enemy_alive[14] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[15] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[15]) &&
+			(bullet_y <= enemy_y_pos[15] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[15])
+			)
+			begin
+				enemy_y_pos[15] = 600;
+				enemy_alive[15] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+		
+			if(
+			(bullet_x <= enemy_x_pos[16] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[16]) &&
+			(bullet_y <= enemy_y_pos[16] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[16])
+			)
+			begin
+				enemy_y_pos[16] = 600;
+				enemy_alive[16] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= enemy_x_pos[17] + enemy_size && bullet_x + bullet_size >= enemy_x_pos[17]) &&
+			(bullet_y <= enemy_y_pos[17] + enemy_size && bullet_y + bullet_size >= enemy_y_pos[17])
+			)
+			begin
+				enemy_y_pos[17] = 600;
+				enemy_alive[17] = 1'b0;
+				bullet_y = 0;
+				points = points + 1;
+				killed = killed + 1;
+				bullet_free = 1'b1;
+			end
+			// handling collisions - obstacle-bullet
+			if(
+			(bullet_x <= obstacle_x_pos[0] + obstacle_x_size && bullet_x + bullet_size >= obstacle_x_pos[0]) &&
+			(bullet_y <= obstacle_y_pos[0] + obstacle_y_size && bullet_y + bullet_size >= obstacle_y_pos[0]) && 
+			obstacle_life[0] > 0
+			)
+			begin
+				obstacle_life[0] = obstacle_life[0] -1;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= obstacle_x_pos[1] + obstacle_x_size && bullet_x + bullet_size >= obstacle_x_pos[1]) &&
+			(bullet_y <= obstacle_y_pos[1] + obstacle_y_size && bullet_y + bullet_size >= obstacle_y_pos[1]) &&
+			obstacle_life[1] > 0
+			)
+			begin
+				obstacle_life[1] = obstacle_life[1] -1;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= obstacle_x_pos[2] + obstacle_x_size && bullet_x + bullet_size >= obstacle_x_pos[2]) &&
+			(bullet_y <= obstacle_y_pos[2] + obstacle_y_size && bullet_y + bullet_size >= obstacle_y_pos[2]) &&
+			obstacle_life[2] > 0
+			)
+			begin
+				obstacle_life[2] = obstacle_life[2] -1;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+			end
+			
+			if(
+			(bullet_x <= obstacle_x_pos[3] + obstacle_x_size && bullet_x + bullet_size >= obstacle_x_pos[3]) &&
+			(bullet_y <= obstacle_y_pos[3] + obstacle_y_size && bullet_y + bullet_size >= obstacle_y_pos[3]) &&
+			obstacle_life[3] > 0
+			)
+			begin
+				obstacle_life[3] = obstacle_life[3] -1;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+			end
+			
+			
+			if(killed == 18)
 			begin 
 				level = level + 1;
 				killed = 0;
 				enemy_direction = 1'b0;
-				for(i=0;i<9;i=i+1)
-				begin
-					enemy_x_pos[i] = 200 + i*60;
-					enemy_y_pos[i] = 40;
-					enemy_alive[i] = 1'b1;
-				end
+				
+				enemy_x_pos[0] = 200;
+				enemy_y_pos[0] = 40;
+				enemy_alive[0] = 1'b1;
+
+				enemy_x_pos[1] = 260;
+				enemy_y_pos[1] = 40;
+				enemy_alive[1] = 1'b1;		
+				
+				enemy_x_pos[2] = 320;
+				enemy_y_pos[2] = 40;
+				enemy_alive[2] = 1'b1;
+
+				enemy_x_pos[3] = 380;
+				enemy_y_pos[3] = 40;
+				enemy_alive[3] = 1'b1;	
+				
+				enemy_x_pos[4] = 440;
+				enemy_y_pos[4] = 40;
+				enemy_alive[4] = 1'b1;
+
+				enemy_x_pos[5] = 500;
+				enemy_y_pos[5] = 40;
+				enemy_alive[5] = 1'b1;		
+				
+				enemy_x_pos[6] = 560;
+				enemy_y_pos[6] = 40;
+				enemy_alive[6] = 1'b1;
+
+				enemy_x_pos[7] = 620;
+				enemy_y_pos[7] = 40;
+				enemy_alive[7] = 1'b1;	
+				
+				enemy_x_pos[8] = 680;
+				enemy_y_pos[8] = 40;
+				enemy_alive[8] = 1'b1;	
+				
+				enemy_x_pos[9] = 200;
+				enemy_y_pos[9] = 100;
+				enemy_alive[9] = 1'b1;
+
+				enemy_x_pos[10] = 260;
+				enemy_y_pos[10] = 100;
+				enemy_alive[10] = 1'b1;		
+				
+				enemy_x_pos[11] = 320;
+				enemy_y_pos[11] = 100;
+				enemy_alive[11] = 1'b1;
+
+				enemy_x_pos[12] = 380;
+				enemy_y_pos[12] = 100;
+				enemy_alive[12] = 1'b1;	
+				
+				enemy_x_pos[13] = 440;
+				enemy_y_pos[13] = 100;
+				enemy_alive[13] = 1'b1;
+
+				enemy_x_pos[14] = 500;
+				enemy_y_pos[14] = 100;
+				enemy_alive[14] = 1'b1;		
+				
+				enemy_x_pos[15] = 560;
+				enemy_y_pos[15] = 100;
+				enemy_alive[15] = 1'b1;
+
+				enemy_x_pos[16] = 620;
+				enemy_y_pos[16] = 100;
+				enemy_alive[16] = 1'b1;	
+				
+				enemy_x_pos[17] = 680;
+				enemy_y_pos[17] = 100;
+				enemy_alive[17] = 1'b1;	
+				
+				obstacle_x_pos[0] = 247;
+				obstacle_y_pos[0] = 400;
+				obstacle_x_pos[1] = 375;
+				obstacle_y_pos[1] = 400;
+				obstacle_x_pos[2] = 503;
+				obstacle_y_pos[2] = 400;
+				obstacle_x_pos[3] = 631;
+				obstacle_y_pos[3] = 400;
+				
+				obstacle_life[0] = 4;
+				obstacle_life[1] = 4;
+				obstacle_life[2] = 4;
+				obstacle_life[3] = 4;
 			end
 			
 			//if bullet is free and space is pushed -> fire the bullet
@@ -290,7 +893,7 @@ module space_invaders(
 			
 			//if bullet is busy move the bullet up
 			if(bullet_free == 1'b0)
-				bullet_y = bullet_y - 5;
+				bullet_y = bullet_y - 10;
 			
 			//if bullet is at the top of the screen mark it as free and move into darkness 
 			if(bullet_y <= 35)
