@@ -224,7 +224,40 @@ module space_invaders(
 	
 	always @ (posedge clk25MHz)
 	begin
-      if ((counter_y >= position_y && counter_y < position_y+size_y && counter_x >= position_x && counter_x < position_x + size_x) ||
+		//if game is lost show red screen 
+		if(lost == 1'b1)
+		begin
+			if(		
+		(digit2[0] && counter_y >= 255 && counter_y < 260 && counter_x >= 445 && counter_x < 460) ||
+		(digit2[1] && counter_y >= 260 && counter_y < 275 && counter_x >= 460 && counter_x < 465) ||
+		(digit2[2] && counter_y >= 280 && counter_y < 295 && counter_x >= 460 && counter_x < 465) ||
+		(digit2[3] && counter_y >= 295 && counter_y < 300 && counter_x >= 445 && counter_x < 460) ||
+		(digit2[4] && counter_y >= 280 && counter_y < 295 && counter_x >= 440 && counter_x < 445) ||
+		(digit2[5] && counter_y >= 260 && counter_y < 275 && counter_x >= 440 && counter_x < 445) ||
+		(digit2[6] && counter_y >= 275 && counter_y < 280 && counter_x >= 445 && counter_x < 460) ||
+		
+		(digit1[0] && counter_y >= 255 && counter_y < 260 && counter_x >= 475 && counter_x < 490) ||
+		(digit1[1] && counter_y >= 260 && counter_y < 275 && counter_x >= 490 && counter_x < 495) ||
+		(digit1[2] && counter_y >= 280 && counter_y < 295 && counter_x >= 490 && counter_x < 495) ||
+		(digit1[3] && counter_y >= 295 && counter_y < 300 && counter_x >= 475 && counter_x < 490) ||
+		(digit1[4] && counter_y >= 280 && counter_y < 295 && counter_x >= 470 && counter_x < 475) ||
+		(digit1[5] && counter_y >= 260 && counter_y < 275 && counter_x >= 470 && counter_x < 475) ||
+		(digit1[6] && counter_y >= 275 && counter_y < 280 && counter_x >= 475 && counter_x < 490) 
+		)
+			begin
+				r_red <= 4'hF;    
+				r_blue <= 4'hF;
+				r_green <= 4'hF;
+			end
+			else
+			begin
+				r_red <= 4'h8;    
+				r_blue <= 4'h0;
+				r_green <= 4'h0;
+			end
+		end
+		//conditions for every object on screen
+      else if ((counter_y >= position_y && counter_y < position_y+size_y && counter_x >= position_x && counter_x < position_x + size_x) ||
 		(counter_y >= enemy_y_pos[0] && counter_y < enemy_y_pos[0] + enemy_size && counter_x >= enemy_x_pos[0] && counter_x < enemy_x_pos[0] + enemy_size) ||
 		(counter_y >= enemy_y_pos[1] && counter_y < enemy_y_pos[1] + enemy_size && counter_x >= enemy_x_pos[1] && counter_x < enemy_x_pos[1] + enemy_size) ||
 		(counter_y >= enemy_y_pos[2] && counter_y < enemy_y_pos[2] + enemy_size && counter_x >= enemy_x_pos[2] && counter_x < enemy_x_pos[2] + enemy_size) ||
@@ -268,17 +301,161 @@ module space_invaders(
 		(digit2[5] && counter_y >= 45 && counter_y < 60 && counter_x >= 720 && counter_x < 725) ||
 		(digit2[6] && counter_y >= 60 && counter_y < 65 && counter_x >= 725 && counter_x < 740) 
 		)
+		begin
+			//color enemies red
+			if(
+			(counter_y >= enemy_y_pos[0] && counter_y < enemy_y_pos[0] + enemy_size && counter_x >= enemy_x_pos[0] && counter_x < enemy_x_pos[0] + enemy_size) ||
+			(counter_y >= enemy_y_pos[1] && counter_y < enemy_y_pos[1] + enemy_size && counter_x >= enemy_x_pos[1] && counter_x < enemy_x_pos[1] + enemy_size) ||
+			(counter_y >= enemy_y_pos[2] && counter_y < enemy_y_pos[2] + enemy_size && counter_x >= enemy_x_pos[2] && counter_x < enemy_x_pos[2] + enemy_size) ||
+			(counter_y >= enemy_y_pos[3] && counter_y < enemy_y_pos[3] + enemy_size && counter_x >= enemy_x_pos[3] && counter_x < enemy_x_pos[3] + enemy_size) ||
+			(counter_y >= enemy_y_pos[4] && counter_y < enemy_y_pos[4] + enemy_size && counter_x >= enemy_x_pos[4] && counter_x < enemy_x_pos[4] + enemy_size) ||
+			(counter_y >= enemy_y_pos[5] && counter_y < enemy_y_pos[5] + enemy_size && counter_x >= enemy_x_pos[5] && counter_x < enemy_x_pos[5] + enemy_size) ||
+			(counter_y >= enemy_y_pos[6] && counter_y < enemy_y_pos[6] + enemy_size && counter_x >= enemy_x_pos[6] && counter_x < enemy_x_pos[6] + enemy_size) ||
+			(counter_y >= enemy_y_pos[7] && counter_y < enemy_y_pos[7] + enemy_size && counter_x >= enemy_x_pos[7] && counter_x < enemy_x_pos[7] + enemy_size) ||
+			(counter_y >= enemy_y_pos[8] && counter_y < enemy_y_pos[8] + enemy_size && counter_x >= enemy_x_pos[8] && counter_x < enemy_x_pos[8] + enemy_size) ||
+			(counter_y >= enemy_y_pos[9] && counter_y < enemy_y_pos[9] + enemy_size && counter_x >= enemy_x_pos[9] && counter_x < enemy_x_pos[9] + enemy_size) ||
+			(counter_y >= enemy_y_pos[10] && counter_y < enemy_y_pos[10] + enemy_size && counter_x >= enemy_x_pos[10] && counter_x < enemy_x_pos[10] + enemy_size) ||
+			(counter_y >= enemy_y_pos[11] && counter_y < enemy_y_pos[11] + enemy_size && counter_x >= enemy_x_pos[11] && counter_x < enemy_x_pos[11] + enemy_size) ||
+			(counter_y >= enemy_y_pos[12] && counter_y < enemy_y_pos[12] + enemy_size && counter_x >= enemy_x_pos[12] && counter_x < enemy_x_pos[12] + enemy_size) ||
+			(counter_y >= enemy_y_pos[13] && counter_y < enemy_y_pos[13] + enemy_size && counter_x >= enemy_x_pos[13] && counter_x < enemy_x_pos[13] + enemy_size) ||
+			(counter_y >= enemy_y_pos[14] && counter_y < enemy_y_pos[14] + enemy_size && counter_x >= enemy_x_pos[14] && counter_x < enemy_x_pos[14] + enemy_size) ||
+			(counter_y >= enemy_y_pos[15] && counter_y < enemy_y_pos[15] + enemy_size && counter_x >= enemy_x_pos[15] && counter_x < enemy_x_pos[15] + enemy_size) ||
+			(counter_y >= enemy_y_pos[16] && counter_y < enemy_y_pos[16] + enemy_size && counter_x >= enemy_x_pos[16] && counter_x < enemy_x_pos[16] + enemy_size) ||
+			(counter_y >= enemy_y_pos[17] && counter_y < enemy_y_pos[17] + enemy_size && counter_x >= enemy_x_pos[17] && counter_x < enemy_x_pos[17] + enemy_size)
+			)
+			begin	
+				r_red <= 4'hF;    
+				r_blue <= 4'h0;
+				r_green <= 4'h0;
+			end
+			//color obstacles
+			else if (counter_y >= obstacle_y_pos[0] && counter_y < obstacle_y_pos[0] + obstacle_y_size && 
+			counter_x >= obstacle_x_pos[0] && counter_x < obstacle_x_pos[0] + obstacle_x_size && obstacle_life[0] > 0 )
+			begin 
+				if (obstacle_life[0] == 4)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h0;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[0] == 3)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h4;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[0] == 2)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h8;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[0] == 1)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'hC;
+					r_blue <= 4'hF;
+				end
+			end
+			else if (counter_y >= obstacle_y_pos[1] && counter_y < obstacle_y_pos[1] + obstacle_y_size && 
+			counter_x >= obstacle_x_pos[1] && counter_x < obstacle_x_pos[1] + obstacle_x_size && obstacle_life[1] > 0)
+			begin 
+				if (obstacle_life[1] == 4)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h0;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[1] == 3)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h4;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[1] == 2)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h8;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[1] == 1)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'hC;
+					r_blue <= 4'hF;
+				end
+			end
+			else if (counter_y >= obstacle_y_pos[2] && counter_y < obstacle_y_pos[2] + obstacle_y_size && 
+			counter_x >= obstacle_x_pos[2] && counter_x < obstacle_x_pos[2] + obstacle_x_size && obstacle_life[2] > 0)
+			begin 
+				if (obstacle_life[2] == 4)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h0;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[2] == 3)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h4;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[2] == 2)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h8;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[2] == 1)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'hC;
+					r_blue <= 4'hF;
+				end
+			end
+			else if (counter_y >= obstacle_y_pos[3] && counter_y < obstacle_y_pos[3] + obstacle_y_size && 
+			counter_x >= obstacle_x_pos[3] && counter_x < obstacle_x_pos[3] + obstacle_x_size && obstacle_life[3] > 0)
+			begin 
+				if (obstacle_life[3] == 4)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h0;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[3] == 3)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h4;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[3] == 2)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'h8;
+					r_blue <= 4'hF;
+				end
+				else if (obstacle_life[3] == 1)
+				begin
+					r_red <= 4'h3;    
+					r_green <= 4'hC;
+					r_blue <= 4'hF;
+				end
+			end
+			//color everything else what should be shown white
+			else
 			begin
 				r_red <= 4'hF;    
 				r_blue <= 4'hF;
 				r_green <= 4'hF;
-			end 
-		else 
-			begin
-				r_red <= 4'h0;    
-				r_blue <= 4'h0;
-				r_green <= 4'h0;
 			end
+		end 
+		//color everything else black
+		else 
+		begin
+			r_red <= 4'h0;    
+			r_blue <= 4'h0;
+			r_green <= 4'h0;
+		end
 	end
 	
 	always@(posedge clk_move)
@@ -381,6 +558,13 @@ module space_invaders(
 				obstacle_life[1] = 4;
 				obstacle_life[2] = 4;
 				obstacle_life[3] = 4;
+				
+				bullet_x = 0;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+				
+				position_x = (640/2) + 144;
+				position_y = 450;
 			end
 				
 		end
@@ -881,6 +1065,13 @@ module space_invaders(
 				obstacle_life[1] = 4;
 				obstacle_life[2] = 4;
 				obstacle_life[3] = 4;
+				
+				bullet_x = 0;
+				bullet_y = 0;
+				bullet_free = 1'b1;
+				
+				position_x = (640/2) + 144;
+				position_y = 450;
 			end
 			
 			//if bullet is free and space is pushed -> fire the bullet
