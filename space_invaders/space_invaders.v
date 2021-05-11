@@ -10,13 +10,15 @@ module space_invaders(
 	//////////// LED //////////
 	output [9:0] LEDR,
 	input  [1:0] KEY,
+	input  [9:0] SW,
+
 	//////////// VGA //////////
 	output VGA_hSync,
 	output VGA_vSync, 
 	output [3:0] Red, Green, Blue,
 
 	//////////// Keyboard //////////
-	input kData, 
+	input kData,  
 	input kClock 
 );
 	integer i; // for iterations
@@ -161,10 +163,11 @@ module space_invaders(
 	//logic
 	integer level = 1;
 	integer killed = 0;
+
 	reg pause = 1'b1;
 	reg lost = 1'b0;
 	
-	move_clk update_clk(clk, clk_move);
+	move_clk update_clk(clk, clk_move, SW);
 	vga_clk vga_reduce(clk, clk25MHz);
 	keyboard move(kData, kClock, direction_x, LEDR, fired);
 	
@@ -1084,7 +1087,7 @@ module space_invaders(
 			
 			//if bullet is busy move the bullet up
 			if(bullet_free == 1'b0)
-				bullet_y = bullet_y - 10;
+				bullet_y = bullet_y - 12;
 			
 			//if bullet is at the top of the screen mark it as free and move into darkness 
 			if(bullet_y <= 35)
@@ -1103,7 +1106,8 @@ module space_invaders(
 endmodule
 
 
-module move_clk(clk, clk_move);
+module move_clk(clk, clk_move, SW);
+	input[9:0] SW;
 	input clk;
 	output reg clk_move;
 	reg [21:0] count;	
@@ -1111,11 +1115,23 @@ module move_clk(clk, clk_move);
 	always@(posedge clk)
 	begin
 		count <= count + 1;
-		if(count == 1777777)
-		begin
-			clk_move <= ~clk_move;
-			count <= 0;
-		end	
+		
+		if(SW[0] == 1'b1)
+		begin 
+			if(count > 1777777) 
+			begin
+				clk_move <= ~clk_move;
+				count <= 0;
+			end	
+		end
+		else if(SW[0] == 1'b0)
+		begin 
+			if(count > 888888) 
+			begin
+				clk_move <= ~clk_move;
+				count <= 0;
+			end	
+		end
 	end
 endmodule
 
@@ -1180,6 +1196,11 @@ module keyboard(kData, kClock, direction_x, LEDR, fired);
 		else if (code == 8'h29) // space fire
 		begin 
 			fired = 1'b1;
+		end
+		else
+		begin 
+			fired = 1'b0;
+			direction_x = 0;
 		end
 	end
 endmodule
